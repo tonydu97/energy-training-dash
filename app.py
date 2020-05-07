@@ -31,6 +31,7 @@ import plotly.express as px
 
 # global vars
 dirname = os.path.dirname(__file__)
+lst_pages = ['introduction', 'pros-cons', 'use-cases']
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -49,7 +50,7 @@ HEADBAR = dbc.Navbar(
                 ],
                 align='center',
                 no_gutters=True,
-            ),href="http://www.crai.com/industry/energy"
+            ),href='http://www.crai.com/industry/energy'
         )
     ],
     color='dark',
@@ -66,9 +67,9 @@ NAV_PANE = dbc.Jumbotron(
                 html.Label("Today's Agenda", className='lead'),
                 dbc.Nav(
                     [
-                        dbc.NavLink("Page 1", href="/page-1", id="page-1-link", active=True),
-                        dbc.NavLink("Page 2", href="/page-2", id="page-2-link"),
-                        dbc.NavLink("Page 3", href="/page-3", id="page-3-link"),                       
+                        dbc.NavLink('Introduction to Dash', href='/introduction', id='page-1-link', active=True, style={'fontSize':20}),
+                        dbc.NavLink('Advantages and Disadvantages of Dash', href='/pros-cons', id='page-2-link', style={'fontSize':20}),
+                        dbc.NavLink('Potential Use Cases', href='/use-cases', id='page-3-link', style={'fontSize':20}),                       
                     ],
                     vertical = True, 
                     pills = True,
@@ -78,8 +79,9 @@ NAV_PANE = dbc.Jumbotron(
     ]
 )
 
-CONTENT = dbc.Card()
-
+CONTENT = dbc.Card(
+    id='page-content'
+)
 
 
 BODY = dbc.Container(
@@ -95,7 +97,46 @@ BODY = dbc.Container(
     className='mt-12', fluid = True
 )
 
+
+
+INTRODUCTION = html.P('This is the content of page 1!')
+
+PROS_CONS = html.P('This is the content of page 2!')
+
+USE_CASES = html.P('This is the content of page 3!')
+
+# Callback Functions
+@app.callback(
+    [Output(f'page-{i}-link', 'active') for i in range(1, 4)],
+    [Input('url', 'pathname')],
+)
+def toggle_active_links(pathname):
+    if pathname == '/':
+        # Treat page 1 as the homepage / index
+        return True, False, False
+    return [pathname == f'/{page}' for page in lst_pages]
+
+
+@app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
+def render_page_content(pathname):
+    if pathname in ['/', '/' + lst_pages[0]]:
+        return INTRODUCTION
+    elif pathname == '/' + lst_pages[1]:
+        return PROS_CONS
+    elif pathname == '/' + lst_pages[2]:
+        return USE_CASES
+    # If the user tries to reach a different page, return a 404 message
+    return dbc.Jumbotron(
+        [
+            html.H1('404: Not found', className='text-danger'),
+            html.Hr(),
+            html.P(f'The pathname {pathname} is invalid'),
+        ]
+    )
+
+
+
 app.title = 'CRA Energy Training'
-app.layout = html.Div(children=[HEADBAR, BODY])
+app.layout = html.Div(children=[dcc.Location(id='url'), HEADBAR, BODY])
 if __name__ == '__main__':
     app.run_server(host='127.0.0.1', port='8050', debug=True, dev_tools_ui=True)
