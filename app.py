@@ -31,7 +31,7 @@ import plotly.express as px
 
 # global vars
 dirname = os.path.dirname(__file__)
-lst_pages = ['introduction', 'pros-cons', 'use-cases']
+lst_pages = ['dash-intro', 'pros-cons', 'use-cases']
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -43,14 +43,14 @@ HEADBAR = dbc.Navbar(
         html.A(
             dbc.Row(
                 [
-                    dbc.Col(html.Img(src=app.get_asset_url('branding.png'), height='40px')),
+                    dbc.Col(html.Img(src=app.get_asset_url('branding.png'), height='50px')),
                     dbc.Col(
-                        dbc.NavbarBrand('Energy Training 5/22', className='ml-2')
+                        dbc.NavbarBrand('Energy Training', className='ml-2')
                     ),
                 ],
                 align='center',
                 no_gutters=True,
-            ),href='http://www.crai.com/industry/energy'
+            ),href='/'
         )
     ],
     color='dark',
@@ -62,24 +62,24 @@ NAV_PANE = dbc.Jumbotron(
     [
         dbc.Container(
             [
-                html.H4(children='Python Web Apps in Dash', className='display-5'),
+                html.H4(children="Today's Agenda", className='display-5'),
                 html.Hr(className='my-2'),
-                html.Label("Today's Agenda", className='lead'),
+                #html.Label("Today's Agenda", className='lead'),
                 dbc.Nav(
                     [
-                        dbc.NavLink('Introduction to Dash', href='/introduction', id='page-1-link', active=True, style={'fontSize':20}),
-                        dbc.NavLink('Advantages and Disadvantages of Dash', href='/pros-cons', id='page-2-link', style={'fontSize':20}),
-                        dbc.NavLink('Potential Use Cases', href='/use-cases', id='page-3-link', style={'fontSize':20}),                       
+                        dbc.NavLink('Introduction to Dash', href='/dash-intro', id=lst_pages[0], style={'fontSize':20}),
+                        dbc.NavLink('Advantages and Disadvantages of Dash', href='/pros-cons', id=lst_pages[1], style={'fontSize':20}),
+                        dbc.NavLink('Potential Use Cases', href='/use-cases', id=lst_pages[2], style={'fontSize':20}),                       
                     ],
                     vertical = True, 
                     pills = True,
                 )
             ]
         )
-    ]
+    ], style={'height':'100%'}
 )
 
-CONTENT = dbc.Card(
+CONTENT = html.Div(
     id='page-content'
 )
 
@@ -88,18 +88,54 @@ BODY = dbc.Container(
     [
         dbc.Row(
             [
-                dbc.Col(NAV_PANE, md=3, align='center'),
-                dbc.Col(dbc.Card(CONTENT), md=9),
+                dbc.Col(NAV_PANE, md=3),
+                dbc.Col(dbc.Card(CONTENT)),
             ],
-            style={'marginTop': 30},
+            style={'marginTop': 30, 'marginLeft': 100, 'marginRight': 100},
         )
     ],
     className='mt-12', fluid = True
 )
 
 
+HOME = dbc.Card(
+    dbc.CardBody(
+        children=[
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(src=app.get_asset_url('energy.png'), height='300px'), md=4),
+                    dbc.Col(
+                        children=[
+                            html.H1('Python Web Applications in Dash'),
+                            html.Img(src=app.get_asset_url('dash.png')),
+                            html.H3('May 22, 2020'),       
+                        ], md=8
+                    ),
+                ], align='center'
+            ), 
 
-INTRODUCTION = html.P('This is the content of page 1!')
+        ]
+    ), #className='vh-100', 
+    style={'height':'720px'}
+
+)
+
+DASH_INTRO = dbc.Card(
+    [
+        dbc.CardHeader(html.H3('What is Dash?')),
+        dbc.CardBody(
+            children=[
+                dcc.Markdown('''
+                # Dash is a Python library for creating web applications
+                &nbsp;
+                * ##### Web application front-end user interface
+                &nbsp;
+                * ##### Python back-end to perform data processing and visualization
+                ''')
+            ]
+        )
+    ]
+)
 
 PROS_CONS = html.P('This is the content of page 2!')
 
@@ -107,20 +143,19 @@ USE_CASES = html.P('This is the content of page 3!')
 
 # Callback Functions
 @app.callback(
-    [Output(f'page-{i}-link', 'active') for i in range(1, 4)],
+    [Output(f'{page}', 'active') for page in lst_pages],
     [Input('url', 'pathname')],
 )
 def toggle_active_links(pathname):
-    if pathname == '/':
-        # Treat page 1 as the homepage / index
-        return True, False, False
     return [pathname == f'/{page}' for page in lst_pages]
 
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def render_page_content(pathname):
-    if pathname in ['/', '/' + lst_pages[0]]:
-        return INTRODUCTION
+    if pathname in ['/', '/home']:
+        return HOME
+    elif pathname == '/' + lst_pages[0]:
+        return DASH_INTRO
     elif pathname == '/' + lst_pages[1]:
         return PROS_CONS
     elif pathname == '/' + lst_pages[2]:
