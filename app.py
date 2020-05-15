@@ -31,7 +31,7 @@ import plotly.express as px
 
 # global vars
 dirname = os.path.dirname(__file__)
-lst_pages = ['dash-intro', 'pros-cons', 'use-cases']
+lst_pages = ['dash-intro', 'analysis', 'visualization', 'demo', 'use-cases']
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -43,7 +43,7 @@ HEADBAR = dbc.Navbar(
         html.A(
             dbc.Row(
                 [
-                    dbc.Col(html.Img(src=app.get_asset_url('branding.png'), height='50px')),
+                    dbc.Col(html.Img(src=app.get_asset_url('branding.png'), height='40px')),
                     dbc.Col(
                         dbc.NavbarBrand('Energy Training', className='ml-2')
                     ),
@@ -60,27 +60,31 @@ HEADBAR = dbc.Navbar(
 
 NAV_PANE = dbc.Jumbotron(
     [
-        dbc.Container(
+        html.Div(
             [
-                html.H4(children="Today's Agenda", className='display-5'),
+                html.H3(children="Agenda", className='display-5'),
                 html.Hr(className='my-2'),
                 #html.Label("Today's Agenda", className='lead'),
                 dbc.Nav(
                     [
                         dbc.NavLink('Introduction to Dash', href='/dash-intro', id=lst_pages[0], style={'fontSize':20}),
-                        dbc.NavLink('Advantages and Disadvantages of Dash', href='/pros-cons', id=lst_pages[1], style={'fontSize':20}),
-                        dbc.NavLink('Potential Use Cases', href='/use-cases', id=lst_pages[2], style={'fontSize':20}),                       
+                        dbc.NavLink('Data Analysis with Dash', href='/analysis', id=lst_pages[1], style={'fontSize':20}),
+                        dbc.NavLink('Data Visualization with Dash', href='/visualization', id=lst_pages[2], style={'fontSize':20}),
+                        dbc.NavLink('Live Demo', href='/demo', id=lst_pages[3], style={'fontSize':20}),
+                        dbc.NavLink('Potential Use Cases', href='/use-cases', id=lst_pages[4], style={'fontSize':20}),                       
                     ],
                     vertical = True, 
                     pills = True,
                 )
             ]
         )
-    ], style={'height':'100%'}
+    ], style={'height': '100%'}
 )
 
 CONTENT = html.Div(
-    id='page-content'
+    [
+        dbc.Card(id='page-content', style={'height':'720px'})
+    ]
 )
 
 
@@ -88,58 +92,127 @@ BODY = dbc.Container(
     [
         dbc.Row(
             [
-                dbc.Col(NAV_PANE, md=3),
-                dbc.Col(dbc.Card(CONTENT)),
+                dbc.Col(NAV_PANE, width=3),
+                dbc.Col(CONTENT),
             ],
-            style={'marginTop': 30, 'marginLeft': 100, 'marginRight': 100},
+            style={'marginTop': 30, 'marginLeft': 30, 'marginRight': 100},
         )
     ],
     className='mt-12', fluid = True
 )
 
 
-HOME = dbc.Card(
-    dbc.CardBody(
-        children=[
-            dbc.Row(
-                [
-                    dbc.Col(html.Img(src=app.get_asset_url('energy.png'), height='300px'), md=4),
-                    dbc.Col(
-                        children=[
-                            html.H1('Python Web Applications in Dash'),
-                            html.Img(src=app.get_asset_url('dash.png')),
-                            html.H3('May 22, 2020'),       
-                        ], md=8
-                    ),
-                ], align='center'
-            ), 
+HOME = dbc.CardBody(
+    children=[
+        dbc.Row(
+            [
+                dbc.Col(html.Img(src=app.get_asset_url('energy.png'), height='300px'), width=4),
+                dbc.Col(
+                    children=[
+                        html.H1('Python Web Applications in Dash'),
+                        html.Img(src=app.get_asset_url('dash.png')),
+                        html.H3('May 22, 2020'),       
+                    ]
+                ),
+            ], align='center'
+        ), 
 
-        ]
-    ), #className='vh-100', 
-    style={'height':'720px'}
-
+    ]
 )
 
-DASH_INTRO = dbc.Card(
+DASH_INTRO = dbc.CardBody(
     [
-        dbc.CardHeader(html.H3('What is Dash?')),
+        dbc.Row(html.H1('Dash is a Python library for creating web applications'),style={'marginLeft': '10px'},),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Markdown('''
+                        &nbsp;
+                        * ## Front-end user interface in web browser 
+                        &nbsp;
+                        * ## Back-end functions in Python 
+                        &nbsp;
+                        * ## Ability to leverage other Python packages
+                            * ### Pandas, Numpy, Plotly
+                        ''')
+                    ], width=7
+                ),
+                dbc.Col(
+                    [
+                        html.Img(src = app.get_asset_url('MVC.png'), height = '350px', style = {'marginTop': '10px'})
+                    ], #width=6
+                )
+            ]
+        ),
+        dbc.Row(
+            [
+                dbc.Alert(children=html.H3('Dash can be a powerful tool for data analysis and visualization', 
+                style={'textAlign': 'Center'}), color='primary', style={'width': '100%'})
+            ], style={'marginTop':'30px'}
+        )
+    ]
+)
+
+
+ANALYSIS = dbc.Cardbody(
+    [
+        dbc.Row(html.H1('Dash maintains the advantages of programming '),style={'marginLeft': '10px'},),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Markdown('''
+                        &nbsp;
+                        * ## Front-end user interface in web browser 
+                        &nbsp;
+                        * ## Back-end functions in Python 
+                        &nbsp;
+                        * ## Ability to leverage other Python packages
+                            * ### Pandas, Numpy, Plotly
+                        ''')
+                    ], width=12
+                ),
+                dbc.Col(
+                    [
+                       
+                    ], 
+                )
+            ]
+        ),
+        dbc.Row(
+            [
+                dbc.Alert(children=html.H3('Dash can be a powerful tool for data analysis and visualization', 
+                style={'textAlign': 'Center'}), color='primary', style={'width': '100%'})
+            ], style={'marginTop':'30px'}
+        )
+    ]
+)
+
+VISUALIZATION = html.Div()
+
+DEMO = html.Div()
+
+
+USE_CASES = dbc.Card(
+    [
         dbc.CardBody(
             children=[
                 dcc.Markdown('''
                 # Dash is a Python library for creating web applications
                 &nbsp;
-                * ##### Web application front-end user interface
+                * ##### Front-end user interface in web browser
+                &nbsp;
+                * ##### Back-end functions in Python
                 &nbsp;
                 * ##### Python back-end to perform data processing and visualization
                 ''')
             ]
         )
-    ]
+    ], style={'height':'720px'}
 )
 
-PROS_CONS = html.P('This is the content of page 2!')
 
-USE_CASES = html.P('This is the content of page 3!')
 
 # Callback Functions
 @app.callback(
@@ -157,8 +230,12 @@ def render_page_content(pathname):
     elif pathname == '/' + lst_pages[0]:
         return DASH_INTRO
     elif pathname == '/' + lst_pages[1]:
-        return PROS_CONS
+        return ANALYSIS
     elif pathname == '/' + lst_pages[2]:
+        return VISUALIZATION
+    elif pathname == '/' + lst_pages[3]:
+        return DEMO
+    elif pathname == '/' + lst_pages[4]:
         return USE_CASES
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
