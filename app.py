@@ -31,7 +31,7 @@ import plotly.express as px
 
 # global vars
 dirname = os.path.dirname(__file__)
-lst_pages = ['dash-intro', 'analysis', 'visualization', 'demo', 'use-cases']
+lst_pages = ['intro', 'why-dash', 'analysis', 'visualization', 'demo', 'use-cases']
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -67,11 +67,12 @@ NAV_PANE = dbc.Jumbotron(
                 #html.Label("Today's Agenda", className='lead'),
                 dbc.Nav(
                     [
-                        dbc.NavLink('Introduction to Dash', href='/dash-intro', id=lst_pages[0], style={'fontSize':20}),
-                        dbc.NavLink('Data Analysis with Dash', href='/analysis', id=lst_pages[1], style={'fontSize':20}),
-                        dbc.NavLink('Data Visualization with Dash', href='/visualization', id=lst_pages[2], style={'fontSize':20}),
-                        dbc.NavLink('Live Demo', href='/demo', id=lst_pages[3], style={'fontSize':20}),
-                        dbc.NavLink('Potential Use Cases', href='/use-cases', id=lst_pages[4], style={'fontSize':20}),                       
+                        dbc.NavLink('Introduction to Dash', href='/intro', id=lst_pages[0], style={'fontSize':20}),
+                        dbc.NavLink('Why Dash', href='/why-dash', id=lst_pages[1], style={'fontSize':20}),
+                        dbc.NavLink('Data Analysis with Dash', href='/analysis', id=lst_pages[2], style={'fontSize':20}),
+                        dbc.NavLink('Data Visualization with Dash', href='/visualization', id=lst_pages[3], style={'fontSize':20}),
+                        dbc.NavLink('Dash Application Demo', href='/demo', id=lst_pages[4], style={'fontSize':20}),
+                        dbc.NavLink('Potential Use Cases', href='/use-cases', id=lst_pages[5], style={'fontSize':20}),                       
                     ],
                     vertical = True, 
                     pills = True,
@@ -155,21 +156,22 @@ DASH_INTRO = dbc.CardBody(
 )
 
 
-ANALYSIS = dbc.Cardbody(
+WHY_DASH = dbc.CardBody(
     [
-        dbc.Row(html.H1('Dash maintains the advantages of programming '),style={'marginLeft': '10px'},),
+        dbc.Row(html.H1('Dash combines a graphical user interface with the computational advantages of programming'),style={'marginLeft': '10px'},),
         dbc.Row(
             [
                 dbc.Col(
                     [
                         dcc.Markdown('''
                         &nbsp;
-                        * ## Front-end user interface in web browser 
+                        * ## Reproducibility 
                         &nbsp;
-                        * ## Back-end functions in Python 
+                        * ## Modeling and calculation capabilities 
                         &nbsp;
-                        * ## Ability to leverage other Python packages
-                            * ### Pandas, Numpy, Plotly
+                        * ## Computational efficiency 
+                        &nbsp;
+                        * ## Ability to work with large data sets across multiple sources 
                         ''')
                     ], width=12
                 ),
@@ -188,6 +190,8 @@ ANALYSIS = dbc.Cardbody(
         )
     ]
 )
+
+ANALYSIS = html.Div()
 
 VISUALIZATION = html.Div()
 
@@ -230,12 +234,14 @@ def render_page_content(pathname):
     elif pathname == '/' + lst_pages[0]:
         return DASH_INTRO
     elif pathname == '/' + lst_pages[1]:
-        return ANALYSIS
+        return WHY_DASH
     elif pathname == '/' + lst_pages[2]:
-        return VISUALIZATION
+        return ANALYSIS
     elif pathname == '/' + lst_pages[3]:
-        return DEMO
+        return VISUALIZATION
     elif pathname == '/' + lst_pages[4]:
+        return DEMO
+    elif pathname == '/' + lst_pages[5]:
         return USE_CASES
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
