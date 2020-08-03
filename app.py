@@ -158,21 +158,22 @@ DASH_INTRO = dbc.CardBody(
 
 WHY_DASH = dbc.CardBody(
     [
-        dbc.Row(html.H1('Dash combines a graphical user interface with the computational advantages of programming'),style={'marginLeft': '10px'},),
+        dbc.Row(html.H1('Dash combines user friendliness and accessibility with computational power'),style={'marginLeft': '10px'},),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        dcc.Markdown('''
-                        &nbsp;
-                        * ## Reproducibility 
-                        &nbsp;
-                        * ## Modeling and calculation capabilities 
-                        &nbsp;
-                        * ## Computational efficiency 
-                        &nbsp;
-                        * ## Ability to work with large data sets across multiple sources 
-                        ''')
+                        dbc.Table()
+                        # dcc.Markdown('''
+                        # &nbsp;
+                        # * ## Reproducibility 
+                        # &nbsp;
+                        # * ## Modeling and calculation capabilities 
+                        # &nbsp;
+                        # * ## Computational efficiency 
+                        # &nbsp;
+                        # * ## Ability to work with large data sets across multiple sources 
+                        # ''')
                     ], width=12
                 ),
                 dbc.Col(
